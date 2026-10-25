@@ -1,56 +1,112 @@
-# Welcome to your Expo app 👋
+# แอปยืมอุปกรณ์ — ตัวอย่างประกอบคอร์ส Expo
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+แอปตัวอย่างสำหรับเรียน React Native + Expo Router ทำเป็นระบบยืม-คืนอุปกรณ์ในออฟฟิศ
+มี 12 หน้าจอ ข้อมูลไหลครบวงตั้งแต่ล็อกอินจนคืนของ
 
-## Get started
+> แอปนี้ **ไม่มีระบบหลังบ้าน** ข้อมูลเก็บในเครื่องด้วย AsyncStorage เท่านั้น
+> ใช้สำหรับเรียนเรื่องการไหลของข้อมูลและการออกแบบหน้าจอ ไม่ใช่ของที่เอาไปใช้งานจริง
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## ต้องมีอะไรบ้างก่อนเริ่ม
 
-2. Start the app
+| ของที่ต้องมี | เวอร์ชัน | ตรวจด้วยคำสั่ง |
+| --- | --- | --- |
+| Node.js | 20 ขึ้นไป | `node -v` |
+| npm | มากับ Node | `npm -v` |
+| Expo Go (ถ้าจะเปิดบนมือถือ) | ตัวล่าสุดจาก App Store / Play Store | — |
 
-   ```bash
-   npx expo start
-   ```
+แอปนี้ใช้ **Expo SDK 58** ถ้า Expo Go ในเครื่องเป็นรุ่นอื่นจะเปิดไม่ได้
+โหลดตัวล่าสุดจากสโตร์จะตรงกันเอง
 
-In the output, you'll find options to open the app in a
+---
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## วิธีติดตั้ง
 
 ```bash
-npm run reset-project
+git clone https://github.com/devbyanuwat/expo-borrow-equipment.git
+cd expo-borrow-equipment
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+จากนั้นเลือกทางที่จะเปิด:
 
-### Other setup steps
+- **มือถือ** — เปิดแอป Expo Go แล้วสแกน QR ที่ขึ้นในเทอร์มินัล
+- **เว็บ** — กด `w`
+- **iOS Simulator** — กด `i` (ต้องมี Xcode)
+- **Android Emulator** — กด `a` (ต้องมี Android Studio)
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+เข้าหน้าล็อกอินแล้วกรอกชื่ออะไรก็ได้ รหัสผ่านอย่างน้อย 4 ตัว ไม่มีการตรวจกับเซิร์ฟเวอร์
 
-## Learn more
+---
 
-To learn more about developing your project with Expo, look at the following resources:
+## เปิดแล้วเจอ error
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+**`Project is incompatible with this version of Expo Go`**
+Expo Go ในเครื่องคนละรุ่นกับโปรเจกต์ อัป Expo Go จากสโตร์ให้เป็นตัวล่าสุด
 
-## Join the community
+**`Unable to resolve module ...`**
+แคชของ Metro ค้างอยู่ ล้างแล้วเริ่มใหม่
 
-Join our community of developers creating universal apps.
+```bash
+rm -rf .expo node_modules/.cache
+npx expo start --clear
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+**ติดตั้งแล้วรันไม่ขึ้นเลย**
+ลบของเก่าแล้วลงใหม่
+
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
+
+---
+
+## โครงไฟล์
+
+```text
+src/
+├── app/                  หน้าจอทั้งหมด (ชื่อไฟล์ = เส้นทาง)
+│   ├── _layout.tsx       ตัวครอบนอกสุด + ตัวกันคนที่ยังไม่ล็อกอิน
+│   ├── login.tsx         หน้าเข้าสู่ระบบ
+│   ├── (tabs)/           4 แท็บล่าง
+│   │   ├── index.tsx     รายการอุปกรณ์ + ค้นหา
+│   │   ├── my-loans.tsx  ของที่ยืมอยู่ + นับเวลาถอยหลัง
+│   │   ├── notices.tsx   แจ้งเตือน
+│   │   └── settings.tsx  ตั้งค่า + ออกจากระบบ
+│   ├── borrow/[id].tsx   ยืนยันการยืม + QR + ถ่ายรูป
+│   └── loan/[id]/        ขอต่อเวลา / คืนอุปกรณ์
+├── components/           ชิ้นส่วนที่ใช้ซ้ำ
+├── constants/            สี ระยะห่าง ขนาดจุดกด
+├── hooks/                hook ที่เขียนเอง
+└── lib/                  กติกาและข้อมูล (ไม่มีหน้าตาอยู่ในนี้)
+    ├── types.ts          รูปร่างข้อมูล
+    ├── loan-rules.ts     กติกาการยืม-คืน
+    ├── request-rules.ts  กติกาการต่อเวลา จอง ตรวจสภาพ
+    ├── storage.ts        อ่าน-เขียนลงเครื่อง
+    └── store.ts          ตัวกลางที่หน้าจอเรียกใช้
+```
+
+**หลักที่ใช้ทั้งโปรเจกต์:** กติกาอยู่ใน `lib/` หน้าตาอยู่ใน `app/` กับ `components/`
+แยกกันแบบนี้ทำให้ทดสอบกติกาได้โดยไม่ต้องเปิดหน้าจอ
+
+---
+
+## อ่านต่อ
+
+[`design.md`](./design.md) เก็บ design system ของแอปนี้ไว้ทั้งหมด:
+ค่าสีพร้อมตัวเลข contrast ที่วัดจริง · ผังหน้าจอ 12 จอ · ส่วนที่เป็นของจำลอง ·
+และกับดักที่เจอตอนทำจริง เช่นเรื่องการหาข้อมูลที่เพิ่งสร้างจาก state รอบเดิม
+
+---
+
+## คำสั่งที่ใช้บ่อย
+
+```bash
+npx expo start          # เริ่มเซิร์ฟเวอร์
+npx expo start --clear  # เริ่มพร้อมล้างแคช
+npm run lint            # ตรวจโค้ด
+npx tsc --noEmit        # ตรวจชนิดข้อมูล
+```

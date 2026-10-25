@@ -41,3 +41,8 @@ example
 # generated native folders
 /ios
 /android
+
+# เครื่องมือ AI agent ของผู้สอน ไม่ใช่ส่วนหนึ่งของแอป
+.agents/
+.claude/
+skills-lock.json

@@ -46,15 +46,17 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     fontWeight: 500,
   },
+  // ย่อจากค่าเดิมของ template (48/32) เพราะหัวข้อภาษาไทยตกบรรทัดที่จอ 375px
+  // lineHeight เผื่อสระบนล่างของไทย จึงสูงกว่าตัวอักษรมากกว่าภาษาอังกฤษ
   title: {
-    fontSize: 48,
-    fontWeight: 600,
-    lineHeight: 52,
+    fontSize: 28,
+    fontWeight: 700,
+    lineHeight: 40,
   },
   subtitle: {
-    fontSize: 32,
-    lineHeight: 44,
-    fontWeight: 600,
+    fontSize: 20,
+    lineHeight: 30,
+    fontWeight: 700,
   },
   link: {
     lineHeight: 30,
