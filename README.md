@@ -54,6 +54,10 @@ rm -rf .expo node_modules/.cache
 npx expo start --clear
 ```
 
+**VS Code ขึ้นเส้นแดงว่าหา `global.css` หรือ `expo/types` ไม่เจอ**
+ไฟล์ `expo-env.d.ts` ยังไม่ถูกสร้าง ไฟล์นี้ Expo สร้างให้เองตอนรันครั้งแรก
+จึงไม่ได้อยู่ใน repo รัน `npx expo start` หนึ่งครั้งแล้วเส้นแดงจะหายไป
+
 **ติดตั้งแล้วรันไม่ขึ้นเลย**
 ลบของเก่าแล้วลงใหม่
 
